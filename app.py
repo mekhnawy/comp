@@ -19,12 +19,6 @@ except Exception as e:
     print("❌ Database connection failed:", e)
     raise
 
-# In app.py
-page = request.args.get('page', 1, type=int)
-per_page = request.args.get('per_page', 20, type=int)
-offset = (page - 1) * per_page
-query += f" LIMIT {per_page} OFFSET {offset}"
-
 @app.route('/search', methods=['GET'])
 def search():
     try:
@@ -34,13 +28,14 @@ def search():
         min_price = request.args.get('min_price', '')
         max_price = request.args.get('max_price', '')
         min_rating = request.args.get('min_rating', '')
+        page = request.args.get('page', 1, type=int)
+        per_page = request.args.get('per_page', 20, type=int)
         
         cursor = db.cursor(dictionary=True)
         query = "SELECT * FROM products WHERE 1=1"
         params = []
 
         if term:
-            # Search in name and description
             query += " AND (name LIKE %s OR description LIKE %s)"
             params.extend([f"%{term}%", f"%{term}%"])
         
@@ -49,16 +44,25 @@ def search():
             params.append(category)
             
         if min_price:
-            query += " AND price >= %s"
-            params.append(float(min_price))
-            
+            try:
+                query += " AND price >= %s"
+                params.append(float(min_price))
+            except ValueError:
+                pass
+                
         if max_price:
-            query += " AND price <= %s"
-            params.append(float(max_price))
-            
+            try:
+                query += " AND price <= %s"
+                params.append(float(max_price))
+            except ValueError:
+                pass
+                
         if min_rating:
-            query += " AND rating >= %s"
-            params.append(float(min_rating))
+            try:
+                query += " AND rating >= %s"
+                params.append(float(min_rating))
+            except ValueError:
+                pass
 
         # Sorting options
         if sort_by == 'price_low':
@@ -69,13 +73,17 @@ def search():
             query += " ORDER BY rating DESC"
         elif sort_by == 'delivery_fastest':
             query += " ORDER BY DeliveryTime ASC"
+
+        # Add pagination
+        query += " LIMIT %s OFFSET %s"
+        params.extend([per_page, (page - 1) * per_page])
             
         cursor.execute(query, params)
         results = cursor.fetchall()
         return jsonify(results)
 
     except Exception as e:
-        print("🔥 Error in /search:", e)
+        print("Error in /search:", e)
         return jsonify({"error": str(e)}), 500
 
 @app.route('/test')
