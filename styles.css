@@ -22,30 +22,96 @@ h1 {
 }
 
 /* Search box */
+/* Enhanced search box styles */
 .search-box {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 15px;
     margin-bottom: 20px;
+    align-items: center;
 }
 
-.search-box input, 
-.search-box select {
-    padding: 10px;
-    flex: 1 1 200px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    min-width: 120px;
+.search-input-group {
+    flex: 1;
+    min-width: 250px;
+    position: relative;
+    display: flex;
 }
 
-.search-box button {
-    padding: 10px 20px;
+.search-input-group input {
+    padding: 12px 15px;
+    padding-right: 45px;
+    width: 100%;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
+}
+
+.search-input-group input:focus {
+    outline: none;
+    border-color: #4CAF50;
+}
+
+.search-button {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #666;
+    padding: 5px;
+}
+
+.search-button:hover {
+    color: #4CAF50;
+}
+.filter-group {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.filter-group select {
+    padding: 10px 15px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    background-color: white;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.loading {
+    padding: 20px;
+    text-align: center;
+    color: #666;
+    font-style: italic;
+}
+
+.error button {
+    margin-top: 10px;
+    padding: 8px 15px;
     background: #4CAF50;
     color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
-    flex: 1 1 100px;
+}
+
+/* Price filter controls (add to HTML when ready) */
+.price-range {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.price-range input {
+    width: 80px;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
 }
 
 /* Results table */
