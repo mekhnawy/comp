@@ -22,28 +22,48 @@ except Exception as e:
 @app.route('/search', methods=['GET'])
 def search():
     try:
-        term = request.args.get('term')
-        category = request.args.get('category')
+        term = request.args.get('term', '').strip()
+        category = request.args.get('category', '')
         sort_by = request.args.get('sort', '')
+        min_price = request.args.get('min_price', '')
+        max_price = request.args.get('max_price', '')
+        min_rating = request.args.get('min_rating', '')
         
         cursor = db.cursor(dictionary=True)
         query = "SELECT * FROM products WHERE 1=1"
         params = []
 
         if term:
-            query += " AND name LIKE %s"
-            params.append(f"%{term}%")
+            # Search in name and description
+            query += " AND (name LIKE %s OR description LIKE %s)"
+            params.extend([f"%{term}%", f"%{term}%"])
+        
         if category:
             query += " AND category = %s"
             params.append(category)
+            
+        if min_price:
+            query += " AND price >= %s"
+            params.append(float(min_price))
+            
+        if max_price:
+            query += " AND price <= %s"
+            params.append(float(max_price))
+            
+        if min_rating:
+            query += " AND rating >= %s"
+            params.append(float(min_rating))
 
+        # Sorting options
         if sort_by == 'price_low':
             query += " ORDER BY price ASC"
         elif sort_by == 'price_high':
             query += " ORDER BY price DESC"
         elif sort_by == 'rating':
             query += " ORDER BY rating DESC"
-
+        elif sort_by == 'delivery_fastest':
+            query += " ORDER BY DeliveryTime ASC"
+            
         cursor.execute(query, params)
         results = cursor.fetchall()
         return jsonify(results)
