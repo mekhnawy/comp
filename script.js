@@ -1,7 +1,26 @@
+// Add debounce function to prevent excessive API calls
+function debounce(func, delay) {
+    let timeoutId;
+    return function() {
+        const context = this;
+        const args = arguments;
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => func.apply(context, args), delay);
+    };
+}
+
+// Auto-search when typing (with debounce)
+document.getElementById('searchTerm').addEventListener('input', debounce(searchProducts, 500));
+
 async function searchProducts() {
     const term = document.getElementById('searchTerm').value;
     const category = document.getElementById('category').value;
     const sortBy = document.getElementById('sortBy').value; // Get selected sort option
+
+    // Show loading indicator
+    const resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = '<div class="loading">Searching...</div>';
+    
 
     try {
         const response = await fetch(
@@ -15,9 +34,18 @@ async function searchProducts() {
     } catch (error) {
         console.error('Error:', error);
         document.getElementById('results').innerHTML =
-            '<p class="error">Error loading data. Please try again.</p>';
+            <div class="error">
+                <p>Error loading data. Please try again.</p>
+                <button onclick="searchProducts()">Retry</button>
+            </div>`;
     }
 }
+// Add keyboard shortcut (Enter key)
+document.getElementById('searchTerm').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        searchProducts();
+    }
+});
 
 function displayResults(products) {
     const resultsDiv = document.getElementById('results');
