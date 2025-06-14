@@ -19,6 +19,12 @@ except Exception as e:
     print("❌ Database connection failed:", e)
     raise
 
+# In app.py
+page = request.args.get('page', 1, type=int)
+per_page = request.args.get('per_page', 20, type=int)
+offset = (page - 1) * per_page
+query += f" LIMIT {per_page} OFFSET {offset}"
+
 @app.route('/search', methods=['GET'])
 def search():
     try:
