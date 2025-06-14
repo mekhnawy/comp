@@ -29,6 +29,14 @@ document.getElementById('searchTerm').addEventListener('input', async function()
     const suggestions = await getSearchSuggestions(this.value);
     // Display suggestions in a dropdown
 });
+
+        function saveRecentSearch(term) {
+    const searches = JSON.parse(localStorage.getItem('recentSearches') || []);
+    if (!searches.includes(term)) {
+        searches.unshift(term);
+        localStorage.setItem('recentSearches', JSON.stringify(searches.slice(0, 5)));
+    }
+}
     
     try {
         const response = await fetch(`/suggestions?term=${encodeURIComponent(term)}`);
