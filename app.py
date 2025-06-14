@@ -36,7 +36,7 @@ def search():
         params = []
 
         if term:
-            query += " AND (name LIKE %s OR description LIKE %s)"
+            query += " AND (name LIKE %s OR name LIKE %s)"
             params.extend([f"%{term}%", f"%{term}%"])
         
         if category:
