@@ -5,7 +5,7 @@ async function searchProducts() {
 
     try {
         const response = await fetch(
-            `https://shopcheap.onrender.com//search?term=${encodeURIComponent(term)}&category=${encodeURIComponent(category)}&sort=${sortBy}`
+            `https://shopcheap.onrender.com/search?term=${encodeURIComponent(term)}&category=${encodeURIComponent(category)}&sort=${sortBy}`
         );
 
         if (!response.ok) throw new Error('Network response was not ok');
