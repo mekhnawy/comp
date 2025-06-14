@@ -20,6 +20,24 @@ async function searchProducts() {
     // Show loading indicator
     const resultsDiv = document.getElementById('results');
     resultsDiv.innerHTML = '<div class="loading">Searching...</div>';
+
+    // Add to script.js
+    async function getSearchSuggestions(term) {
+    if (term.length < 2) return [];
+    // Add event listener for input
+document.getElementById('searchTerm').addEventListener('input', async function() {
+    const suggestions = await getSearchSuggestions(this.value);
+    // Display suggestions in a dropdown
+});
+    
+    try {
+        const response = await fetch(`/suggestions?term=${encodeURIComponent(term)}`);
+        return await response.json();
+    } catch (error) {
+        console.error('Error getting suggestions:', error);
+        return [];
+    }
+}
     
 
     try {
