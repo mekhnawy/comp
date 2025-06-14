@@ -61,21 +61,21 @@ function displayResults(products) {
                                   this.classList.add('broken-image')">
                 </div>`;
         } else {
-            imageDisplay = `
+            productImage = `
                 <div class="image-container">
                     <div class="image-placeholder">No Image</div>
                 </div>`;
         }
 
         html += `<tr>
-            <td>${product.name}</td>
-            <td>${product.price}</td>
-            <td>${product.siteName}</td>
-            <td>${productLink}</td>
-            <td>${productImage}</td>
-            <td>${product.DeliveryTime}</td>
-            <td>${product.DeliveryFees}</td>
-            <td>${product.rating}/5</td>
+            <td data-label="Name">${product.name || 'N/A'}</td>
+            <td data-label="Price">${product.price || 'N/A'}</td>
+            <td data-label="Store">${product.siteName || 'N/A'}</td>
+            <td data-label="Link">${productLink}</td>
+            <td data-label="Image">${productImage}</td>
+            <td data-label="Delivery">${product.DeliveryTime || 'N/A'}</td>
+            <td data-label="Fees">${product.DeliveryFees || 'N/A'}</td>
+            <td data-label="Rating">${product.rating ? product.rating + '/5' : 'N/A'}</td>
         </tr>`;
     });
     
