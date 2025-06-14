@@ -12,32 +12,15 @@ function debounce(func, delay) {
 // Auto-search when typing (with debounce)
 document.getElementById('searchTerm').addEventListener('input', debounce(searchProducts, 500));
 
-async function searchProducts() {
-    const term = document.getElementById('searchTerm').value;
-    const category = document.getElementById('category').value;
-    const sortBy = document.getElementById('sortBy').value; // Get selected sort option
-
-    // Show loading indicator
-    const resultsDiv = document.getElementById('results');
-    resultsDiv.innerHTML = '<div class="loading">Searching...</div>';
-
-    // Add to script.js
-    async function getSearchSuggestions(term) {
-    if (term.length < 2) return [];
-    // Add event listener for input
-document.getElementById('searchTerm').addEventListener('input', async function() {
-    const suggestions = await getSearchSuggestions(this.value);
-    // Display suggestions in a dropdown
+// Add keyboard shortcut (Enter key)
+document.getElementById('searchTerm').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        searchProducts();
+    }
 });
 
-        function saveRecentSearch(term) {
-    const searches = JSON.parse(localStorage.getItem('recentSearches') || []);
-    if (!searches.includes(term)) {
-        searches.unshift(term);
-        localStorage.setItem('recentSearches', JSON.stringify(searches.slice(0, 5)));
-    }
-}
-    
+async function getSearchSuggestions(term) {
+    if (term.length < 2) return [];
     try {
         const response = await fetch(`/suggestions?term=${encodeURIComponent(term)}`);
         return await response.json();
@@ -46,7 +29,23 @@ document.getElementById('searchTerm').addEventListener('input', async function()
         return [];
     }
 }
-    
+
+function saveRecentSearch(term) {
+    const searches = JSON.parse(localStorage.getItem('recentSearches') || []);
+    if (!searches.includes(term)) {
+        searches.unshift(term);
+        localStorage.setItem('recentSearches', JSON.stringify(searches.slice(0, 5)));
+    }
+}
+
+async function searchProducts() {
+    const term = document.getElementById('searchTerm').value.trim();
+    const category = document.getElementById('category').value;
+    const sortBy = document.getElementById('sortBy').value;
+
+    // Show loading indicator
+    const resultsDiv = document.getElementById('results');
+    resultsDiv.innerHTML = '<div class="loading">Searching...</div>';
 
     try {
         const response = await fetch(
@@ -57,21 +56,16 @@ document.getElementById('searchTerm').addEventListener('input', async function()
 
         const products = await response.json();
         displayResults(products);
+        if (term) saveRecentSearch(term);
     } catch (error) {
         console.error('Error:', error);
-        document.getElementById('results').innerHTML =
+        resultsDiv.innerHTML = `
             <div class="error">
                 <p>Error loading data. Please try again.</p>
                 <button onclick="searchProducts()">Retry</button>
             </div>`;
     }
 }
-// Add keyboard shortcut (Enter key)
-document.getElementById('searchTerm').addEventListener('keypress', function(e) {
-    if (e.key === 'Enter') {
-        searchProducts();
-    }
-});
 
 function displayResults(products) {
     const resultsDiv = document.getElementById('results');
@@ -85,24 +79,22 @@ function displayResults(products) {
         <thead>
             <tr>
                 <th>Name</th>
-                <th>price</th>
-                <th>siteName</th>
-                <th>prodUrl</th>
-                <th>img</th>
-                <th>DeliveryTime</th>
-                <th>DeliveryFees</th>
+                <th>Price</th>
+                <th>Store</th>
+                <th>Link</th>
+                <th>Image</th>
+                <th>Delivery</th>
+                <th>Fees</th>
                 <th>Rating</th>
             </tr>
         </thead>
         <tbody>`;
     
     products.forEach(product => {
-          // Create clickable link if URL exists
         const productLink = product.prodUrl
-            ? `<a href="${product.prodUrl}" target="_blank">View Product on the orginal site</a>`
+            ? `<a href="${product.prodUrl}" target="_blank">View Product</a>`
             : 'N/A';
 
-              // Image with error handling and placeholder
         let productImage;
         if (product.img) {
             productImage = `
