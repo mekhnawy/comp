@@ -220,7 +220,7 @@ async function searchProducts() {
         if (category) params.append('category', category);
         if (sortBy) params.append('sort', sortBy);
 
-        const response = await fetch(`http://localhost:3000/search?${params.toString()}`);
+        const response = await fetch(`https://shopcheap.onrender.com/search?${params.toString()}`);
 
         if (!response.ok) throw new Error('Network response was not ok');
 
