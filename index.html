@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Finder | Smart Shopping Tool</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-search-dollar"></i>
+                    <h1>Product<span>Finder</span></h1>
+                </div>
+                <p class="tagline">Find the best deals across multiple stores</p>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="ad-banner">
+                <div class="ad-placeholder">
+                    <span>Advertisement</span>
+                </div>
+            </div>
+
+            <section class="search-section">
+                <div class="search-container">
+                    <div class="search-box">
+                        <div class="search-input">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="searchTerm" placeholder="Search for products...">
+                            <button id="searchButton" class="search-btn">
+                                <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="filter-controls">
+                        <div class="filter-group">
+                            <label for="category"><i class="fas fa-tags"></i> Category</label>
+                            <select id="category" class="nice-select">
+                                <option value="">All Categories</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Clothing">Clothing</option>
+                                <option value="Home">Home & Garden</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="sortBy"><i class="fas fa-sort"></i> Sort By</label>
+                            <select id="sortBy" class="nice-select">
+                                <option value="">Relevance</option>
+                                <option value="price_low">Price: Low to High</option>
+                                <option value="price_high">Price: High to Low</option>
+                                <option value="rating">Top Rated</option>
+                            </select>
+                        </div>
+
+                        <div class="view-options">
+                            <button id="gridView" class="view-btn" title="Grid View">
+                                <i class="fas fa-th-large"></i>
+                            </button>
+                            <button id="listView" class="view-btn active" title="List View">
+                                <i class="fas fa-list"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="results-section">
+                <div id="loadingIndicator" class="loading-indicator">
+                    <div class="spinner"></div>
+                    <p>Finding the best products for you...</p>
+                </div>
+
+                <div id="results" class="results-list"></div>
+
+                <div id="noResults" class="no-results">
+                    <i class="fas fa-search"></i>
+                    <h3>No products found</h3>
+                    <p>Try adjusting your search or filters</p>
+                </div>
+            </section>
+
+            <div class="ad-banner">
+                <div class="ad-placeholder">
+                    <span>Advertisement</span>
+                </div>
+            </div>
+        </main>
+
+        <footer class="app-footer">
+            <div class="footer-content">
+                <p>&copy; 2023 ProductFinder. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Contact</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="./script.js"></script>
+</body>
+</html>
