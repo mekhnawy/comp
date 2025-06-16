@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Product Finder | Smart Shopping Tool</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="./styles.css">
@@ -12,7 +12,7 @@
         <header class="app-header">
             <div class="header-content">
                 <div class="logo">
-                    <i class="fas fa-search-dollar"></i>
+                    <i class="fas fa-search-dollar" aria-hidden="true"></i>
                     <h1>Product<span>Finder</span></h1>
                 </div>
                 <p class="tagline">Find the best deals across multiple stores</p>
@@ -30,18 +30,18 @@
                 <div class="search-container">
                     <div class="search-box">
                         <div class="search-input">
-                            <i class="fas fa-search"></i>
-                            <input type="text" id="searchTerm" placeholder="Search for products...">
-                            <button id="searchButton" class="search-btn">
-                                <i class="fas fa-arrow-right"></i>
+                            <i class="fas fa-search" aria-hidden="true"></i>
+                            <input type="text" id="searchTerm" placeholder="Search for products..." aria-label="Search for products">
+                            <button id="searchButton" class="search-btn" aria-label="Search">
+                                <i class="fas fa-arrow-right" aria-hidden="true"></i>
                             </button>
                         </div>
                     </div>
 
                     <div class="filter-controls">
                         <div class="filter-group">
-                            <label for="category"><i class="fas fa-tags"></i> Category</label>
-                            <select id="category" class="nice-select">
+                            <label for="category"><i class="fas fa-tags" aria-hidden="true"></i> Category</label>
+                            <select id="category" class="nice-select" aria-label="Select category">
                                 <option value="">All Categories</option>
                                 <option value="Electronics">Electronics</option>
                                 <option value="Clothing">Clothing</option>
@@ -50,8 +50,8 @@
                         </div>
 
                         <div class="filter-group">
-                            <label for="sortBy"><i class="fas fa-sort"></i> Sort By</label>
-                            <select id="sortBy" class="nice-select">
+                            <label for="sortBy"><i class="fas fa-sort" aria-hidden="true"></i> Sort By</label>
+                            <select id="sortBy" class="nice-select" aria-label="Select sort option">
                                 <option value="">Relevance</option>
                                 <option value="price_low">Price: Low to High</option>
                                 <option value="price_high">Price: High to Low</option>
@@ -60,11 +60,11 @@
                         </div>
 
                         <div class="view-options">
-                            <button id="gridView" class="view-btn" title="Grid View">
-                                <i class="fas fa-th-large"></i>
+                            <button id="gridView" class="view-btn" title="Grid View" aria-label="Grid view">
+                                <i class="fas fa-th-large" aria-hidden="true"></i>
                             </button>
-                            <button id="listView" class="view-btn active" title="List View">
-                                <i class="fas fa-list"></i>
+                            <button id="listView" class="view-btn active" title="List View" aria-label="List view">
+                                <i class="fas fa-list" aria-hidden="true"></i>
                             </button>
                         </div>
                     </div>
@@ -73,14 +73,14 @@
 
             <section class="results-section">
                 <div id="loadingIndicator" class="loading-indicator">
-                    <div class="spinner"></div>
+                    <div class="spinner" aria-hidden="true"></div>
                     <p>Finding the best products for you...</p>
                 </div>
 
                 <div id="results" class="results-list"></div>
 
                 <div id="noResults" class="no-results">
-                    <i class="fas fa-search"></i>
+                    <i class="fas fa-search" aria-hidden="true"></i>
                     <h3>No products found</h3>
                     <p>Try adjusting your search or filters</p>
                 </div>
@@ -97,9 +97,9 @@
             <div class="footer-content">
                 <p>&copy; 2023 ProductFinder. All rights reserved.</p>
                 <div class="footer-links">
-                    <a href="#">Privacy</a>
-                    <a href="#">Terms</a>
-                    <a href="#">Contact</a>
+                    <a href="#" aria-label="Privacy policy">Privacy</a>
+                    <a href="#" aria-label="Terms of service">Terms</a>
+                    <a href="#" aria-label="Contact us">Contact</a>
                 </div>
             </div>
         </footer>
