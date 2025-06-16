@@ -22,7 +22,6 @@ listViewButton.addEventListener('click', () => switchView('list'));
 
 // Initialize with list view active
 document.addEventListener('DOMContentLoaded', function() {
-    // Set list view as active
     listViewButton.classList.add('active');
     gridViewButton.classList.remove('active');
     resultsContainer.className = 'results-list';
@@ -32,33 +31,39 @@ document.addEventListener('DOMContentLoaded', function() {
 // View Toggle Function
 function switchView(view) {
     if (view === currentView) return;
-
+    
     currentView = view;
-
+    
     // Update button states
     gridViewButton.classList.toggle('active', view === 'grid');
     listViewButton.classList.toggle('active', view === 'list');
-
+    
     // Update results container class
     resultsContainer.className = view === 'grid' ? 'results-grid' : 'results-list';
-
+    
     // Re-render results if we have any
     const productCards = resultsContainer.querySelectorAll('.product-card, .product-card-list');
     if (productCards.length > 0) {
         const currentTerm = searchTermInput.value.trim();
         const products = Array.from(productCards).map(card => {
+            // Extract retailer name from data attribute first, then fallback to text content
+            const retailerName = card.dataset.retailer || 
+                               card.querySelector('.retailer-name')?.textContent.replace(/[()]/g, '') || 
+                               'Unknown Retailer';
+            
             return {
+                id: card.dataset.productId,
                 name: card.querySelector('.product-title').textContent.replace(/<[^>]*>/g, ''),
                 price: parseFloat(card.querySelector('.product-price').textContent.replace(/[^0-9.]/g, '')),
                 rating: parseFloat(card.querySelector('.product-rating').textContent.trim().split(' ')[0]),
-                siteName: card.querySelector('.retailer-name').textContent.replace(/[()]/g, ''),
+                siteName: retailerName,
                 prod_url: card.querySelector('.btn-primary').href,
                 image_url: card.querySelector('.product-image').src,
                 onSale: card.querySelector('.product-badge') !== null,
                 DeliveryTime: card.querySelector('.delivery-time')?.textContent || ''
             };
         });
-
+        
         displayResults(products, currentTerm);
     }
 }
@@ -66,7 +71,7 @@ function switchView(view) {
 // Format price with thousands separator
 function formatPrice(price) {
     if (price === null || price === undefined || isNaN(price)) return 'N/A';
-
+    
     return price.toLocaleString('en-US', {
         style: 'currency',
         currency: 'USD',
@@ -75,22 +80,18 @@ function formatPrice(price) {
     });
 }
 
-// Highlight search terms in text - Improved version
+// Highlight search terms in text
 function highlightText(text, searchTerm) {
     if (!searchTerm || !text || typeof text !== 'string') return text;
-
+    
     try {
-        // Escape special regex characters and filter out short words
         const words = searchTerm.split(' ')
-            .filter(word => word.length > 2) // Only highlight words longer than 2 characters
+            .filter(word => word.length > 2)
             .map(word => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
-
+        
         if (words.length === 0) return text;
-
-        // Create a regex pattern that matches any of the words
+        
         const pattern = new RegExp(`(${words.join('|')})`, 'gi');
-
-        // Replace matches with highlighted spans
         return text.replace(pattern, '<span class="highlight">$1</span>');
     } catch (e) {
         console.error('Highlight error:', e);
@@ -108,19 +109,18 @@ function showLoading() {
 // Display results
 function displayResults(products, searchTerm) {
     loadingIndicator.style.display = 'none';
-
+    
     if (!products || products.length === 0) {
         noResultsMessage.style.display = 'flex';
         resultsContainer.innerHTML = '';
         return;
     }
-
+    
     noResultsMessage.style.display = 'none';
-
     let html = '';
-
+    
     products.forEach((product, index) => {
-        const productId = `prod-${index}-${Date.now()}`;
+        const productId = product.id || `prod-${index}-${Date.now()}`;
         const productLink = product.prod_url || '#';
         const productImage = product.image_url || '';
         const highlightedName = highlightText(product.name, searchTerm);
@@ -128,19 +128,19 @@ function displayResults(products, searchTerm) {
         const ratingStars = Math.round(product.rating) || 0;
         const retailerName = product.retailer || 'Unknown Retailer';
         const deliveryTime = product.DeliveryTime || 'Delivery time varies';
-
+        
         let starsHtml = '';
         for (let i = 1; i <= 5; i++) {
             starsHtml += `<i class="fas fa-star${i <= ratingStars ? '' : '-empty'}"></i>`;
         }
-
+        
         if (currentView === 'grid') {
             html += `
-            <div class="product-card" data-product-id="${productId}">
+            <div class="product-card" data-product-id="${productId}" data-retailer="${retailerName}">
                 <div class="product-image-container">
                     ${product.onSale ? '<span class="product-badge">Sale</span>' : ''}
-                    <img src="${productImage}"
-                         alt="${product.name}"
+                    <img src="${productImage}" 
+                         alt="${product.name}" 
                          class="product-image"
                          onerror="this.onerror=null; this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"%3E%3Crect fill=\"%23f0f0f0\" width=\"100\" height=\"100\"/%3E%3Ctext fill=\"%23666\" font-family=\"sans-serif\" font-size=\"12\" dy=\".4em\" text-anchor=\"middle\" x=\"50\" y=\"50\"%3ENo Image%3C/text%3E%3C/svg%3E'">
                 </div>
@@ -163,11 +163,11 @@ function displayResults(products, searchTerm) {
             </div>`;
         } else {
             html += `
-            <div class="product-card-list" data-product-id="${productId}">
+            <div class="product-card-list" data-product-id="${productId}" data-retailer="${retailerName}">
                 <div class="product-image-container">
                     ${product.onSale ? '<span class="product-badge">Sale</span>' : ''}
-                    <img src="${productImage}"
-                         alt="${product.name}"
+                    <img src="${productImage}" 
+                         alt="${product.name}" 
                          class="product-image"
                          onerror="this.onerror=null; this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"%3E%3Crect fill=\"%23f0f0f0\" width=\"100\" height=\"100\"/%3E%3Ctext fill=\"%23666\" font-family=\"sans-serif\" font-size=\"12\" dy=\".4em\" text-anchor=\"middle\" x=\"50\" y=\"50\"%3ENo Image%3C/text%3E%3C/svg%3E'">
                 </div>
@@ -195,7 +195,7 @@ function displayResults(products, searchTerm) {
             </div>`;
         }
     });
-
+    
     resultsContainer.innerHTML = html;
     resultsContainer.className = currentView === 'grid' ? 'results-grid' : 'results-list';
 }
@@ -205,25 +205,24 @@ async function searchProducts() {
     const term = searchTermInput.value.trim();
     const category = categorySelect.value;
     const sortBy = sortBySelect.value;
-
+    
     if (!term && !category) {
         alert('Please enter a search term or select a category');
         return;
     }
-
+    
     showLoading();
-
+    
     try {
-        // Build query parameters
         const params = new URLSearchParams();
         if (term) params.append('term', term);
         if (category) params.append('category', category);
         if (sortBy) params.append('sort', sortBy);
-
+        
         const response = await fetch(`https://shopcheap.onrender.com/search?${params.toString()}`);
-
+        
         if (!response.ok) throw new Error('Network response was not ok');
-
+        
         const products = await response.json();
         displayResults(products, term);
     } catch (error) {
