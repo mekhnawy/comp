@@ -85,7 +85,7 @@ function highlightText(text, searchTerm) {
     
     try {
         const words = searchTerm.split(' ')
-            .filter(word => word.length > 2)
+            .filter(word => word.length >= 2)
             .map(word => word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
         
         if (words.length === 0) return text;
