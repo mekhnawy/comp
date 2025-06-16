@@ -599,3 +599,58 @@ body {
         gap: 0.5rem;
     }
 }
+/* Add to styles.css */
+
+/* Better touch targets for mobile */
+.btn {
+    min-height: 44px; /* Recommended minimum touch target size */
+}
+
+.view-btn {
+    width: 44px;
+    height: 44px;
+}
+
+/* Prevent zoom on input focus on mobile */
+@media screen and (max-width: 768px) {
+    input, select, textarea {
+        font-size: 16px;
+    }
+}
+
+/* Better spacing for mobile */
+@media (max-width: 480px) {
+    .product-actions {
+        flex-direction: column;
+    }
+
+    .btn {
+        width: 100%;
+    }
+
+    .search-input {
+        height: 44px;
+    }
+
+    .search-btn {
+        min-width: 44px;
+    }
+}
+
+/* Prevent long words from breaking layout */
+.product-title {
+    word-break: break-word;
+}
+
+/* Better image handling */
+.product-image {
+    padding: 10px;
+    object-fit: contain;
+    background-color: #fff;
+}
+
+/* Improve contrast for accessibility */
+.highlight {
+    background-color: #ffeb3b;
+    color: #000;
+}
