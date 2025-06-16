@@ -29,7 +29,6 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // View Toggle Function
-// In script.js, modify the switchView function
 function switchView(view) {
     if (view === currentView) return;
 
@@ -47,7 +46,6 @@ function switchView(view) {
     if (productCards.length > 0) {
         const currentTerm = searchTermInput.value.trim();
         const products = Array.from(productCards).map(card => {
-            // Extract retailer name from the span element
             const retailerSpan = card.querySelector('.retailer-name');
             const retailerName = retailerSpan ? retailerSpan.textContent.replace(/[()]/g, '').trim() : 'Unknown Retailer';
 
@@ -143,8 +141,7 @@ function displayResults(products, searchTerm) {
                          alt="${product.name}"
                          class="product-image"
                          loading="lazy"
-                         onerror="this.onerror=null; this.src='data:image/svg+xml;charset=UTF-8,%3Csvg...'">
-
+                         onerror="this.onerror=null; this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"%3E%3Crect fill=\"%23f0f0f0\" width=\"100\" height=\"100\"/%3E%3Ctext fill=\"%23666\" font-family=\"sans-serif\" font-size=\"12\" dy=\".4em\" text-anchor=\"middle\" x=\"50\" y=\"50\"%3ENo Image%3C/text%3E%3C/svg%3E'">
                 </div>
                 <div class="product-details">
                     <h3 class="product-title">${highlightedName}</h3>
@@ -157,9 +154,6 @@ function displayResults(products, searchTerm) {
                         <a href="${productLink}" target="_blank" class="btn btn-primary">
                             <i class="fas fa-shopping-cart"></i> Buy Now <span class="retailer-name">(${retailerName})</span>
                         </a>
-                        <button class="btn btn-secondary">
-                            <i class="fas fa-heart"></i>
-                        </button>
                     </div>
                 </div>
             </div>`;
@@ -171,6 +165,7 @@ function displayResults(products, searchTerm) {
                     <img src="${productImage}"
                          alt="${product.name}"
                          class="product-image"
+                         loading="lazy"
                          onerror="this.onerror=null; this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"%3E%3Crect fill=\"%23f0f0f0\" width=\"100\" height=\"100\"/%3E%3Ctext fill=\"%23666\" font-family=\"sans-serif\" font-size=\"12\" dy=\".4em\" text-anchor=\"middle\" x=\"50\" y=\"50\"%3ENo Image%3C/text%3E%3C/svg%3E'">
                 </div>
                 <div class="product-details">
@@ -183,12 +178,12 @@ function displayResults(products, searchTerm) {
                         </div>
                     </div>
                     <div class="product-actions">
-                        <div class="product-actions">
-                            <a href="${productLink}" target="_blank" class="btn btn-primary">
-                                <i class="fas fa-shopping-cart"></i> Buy Now <span class="retailer-name">(${retailerName})</span>
-                            </a>
-                        </div>`;
-                   
+                        <a href="${productLink}" target="_blank" class="btn btn-primary">
+                            <i class="fas fa-shopping-cart"></i> Buy Now <span class="retailer-name">(${retailerName})</span>
+                        </a>
+                    </div>
+                </div>
+            </div>`;
         }
     });
 
@@ -215,7 +210,7 @@ async function searchProducts() {
         if (category) params.append('category', category);
         if (sortBy) params.append('sort', sortBy);
 
-        const response = await fetch(`https://shopcheap.onrender.com/search?${params.toString()}`);
+        const response = await fetch(`http://localhost:3000/search?${params.toString()}`);
 
         if (!response.ok) throw new Error('Network response was not ok');
 
