@@ -29,45 +29,44 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 // View Toggle Function
+// In script.js, modify the switchView function
 function switchView(view) {
     if (view === currentView) return;
-    
+
     currentView = view;
-    
+
     // Update button states
     gridViewButton.classList.toggle('active', view === 'grid');
     listViewButton.classList.toggle('active', view === 'list');
-    
+
     // Update results container class
     resultsContainer.className = view === 'grid' ? 'results-grid' : 'results-list';
-    
+
     // Re-render results if we have any
     const productCards = resultsContainer.querySelectorAll('.product-card, .product-card-list');
     if (productCards.length > 0) {
         const currentTerm = searchTermInput.value.trim();
         const products = Array.from(productCards).map(card => {
-            // Extract retailer name from data attribute first, then fallback to text content
-            const retailerName = card.dataset.retailer || 
-                               card.querySelector('.retailer-name')?.textContent.replace(/[()]/g, '') || 
-                               'Unknown Retailer';
-            
+            // Extract retailer name from the span element
+            const retailerSpan = card.querySelector('.retailer-name');
+            const retailerName = retailerSpan ? retailerSpan.textContent.replace(/[()]/g, '').trim() : 'Unknown Retailer';
+
             return {
                 id: card.dataset.productId,
                 name: card.querySelector('.product-title').textContent.replace(/<[^>]*>/g, ''),
                 price: parseFloat(card.querySelector('.product-price').textContent.replace(/[^0-9.]/g, '')),
                 rating: parseFloat(card.querySelector('.product-rating').textContent.trim().split(' ')[0]),
-                siteName: retailerName,
+                retailer: retailerName,
                 prod_url: card.querySelector('.btn-primary').href,
                 image_url: card.querySelector('.product-image').src,
                 onSale: card.querySelector('.product-badge') !== null,
                 DeliveryTime: card.querySelector('.delivery-time')?.textContent || ''
             };
         });
-        
+
         displayResults(products, currentTerm);
     }
 }
-
 // Format price with thousands separator
 function formatPrice(price) {
     if (price === null || price === undefined || isNaN(price)) return 'N/A';
