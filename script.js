@@ -183,18 +183,12 @@ function displayResults(products, searchTerm) {
                         </div>
                     </div>
                     <div class="product-actions">
-                        <a href="${productLink}" target="_blank" class="btn btn-primary">
-                            <i class="fas fa-shopping-cart"></i> Buy Now <span class="retailer-name">(${retailerName})</span>
-                        </a>
-                        <button class="btn btn-secondary">
-                            <i class="fas fa-heart"></i> Save
-                        </button>
-                        <button class="btn btn-secondary">
-                            <i class="fas fa-chart-line"></i> Compare
-                        </button>
-                    </div>
-                </div>
-            </div>`;
+                        <div class="product-actions">
+                            <a href="${productLink}" target="_blank" class="btn btn-primary">
+                                <i class="fas fa-shopping-cart"></i> Buy Now <span class="retailer-name">(${retailerName})</span>
+                            </a>
+                        </div>`;
+                   
         }
     });
 
